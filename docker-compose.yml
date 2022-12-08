@@ -1,7 +1,5 @@
-version: "3.7"
-
 services:
-app:
+  app:
     image: node:18-alpine
     command: sh -c "yarn install && yarn run dev"
     ports:
@@ -14,12 +12,14 @@ app:
       MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_DB: todos
-  docs:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: dev
-    ports:
-      - 8000:8000
+
+  mysql:
+    image: mysql:8.0
     volumes:
-      - ./:/app
+      - todo-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+
+volumes:
+  todo-mysql-data:
